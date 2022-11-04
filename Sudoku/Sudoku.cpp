@@ -1,12 +1,11 @@
 // De Cooman Jarno - 2022
 #include "pch.h"
-#include <iostream>
+#include "Matrix.h"
 
 int main()
 {
-	const size_t boardSize = 9;
-
-	const int board[boardSize][boardSize]
-	{
-	};
+	Matrix<int> matrix{ 2,2 };
+	matrix.Print();
+	std::cout << matrix[2][2];
+	matrix.Print();
 }
