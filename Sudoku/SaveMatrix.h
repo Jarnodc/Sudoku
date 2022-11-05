@@ -15,8 +15,8 @@ public:
 	Col& operator=(const Col& other) = delete;
 	Col& operator=(Col&& other) noexcept = delete;
 
-	T operator[](size_t col);
-	const T operator[](size_t col) const;
+	T& operator[](size_t col);
+	const T& operator[](size_t col) const;
 
 	size_t Width() const { return m_Cols.size(); }
 
@@ -40,7 +40,7 @@ Col<T>::~Col()
 }
 
 template <typename T>
-T Col<T>::operator[](size_t col)
+T& Col<T>::operator[](size_t col)
 {
 	if (col >= m_Cols.size())
 		col = m_Cols.size() - 1;
@@ -48,7 +48,7 @@ T Col<T>::operator[](size_t col)
 }
 
 template <typename T>
-const T Col<T>::operator[](size_t col) const
+const T& Col<T>::operator[](size_t col) const
 {
 	if (col >= m_Cols.size())
 		col = m_Cols.size() - 1;
@@ -61,8 +61,13 @@ void Col<T>::Print() const
 	for (size_t col = 0; col < m_Cols.size(); ++col)
 	{
 		std::cout << m_Cols[col];
-		if (col != m_Cols - 1)
-			std::cout << ", ";
+		if (col != m_Cols.size() - 1)
+		{
+			if(col % 3 ==2)
+				std::cout << " | ";
+			else
+				std::cout << ", ";
+		}
 	}
 }
 
@@ -127,7 +132,7 @@ Col<P>& SaveMatrix<P>::operator[](size_t row)
 {
 	if (row >= m_Grid.size())
 		row = m_Grid.size() - 1;
-	return m_Grid[row];
+	return *m_Grid[row];
 }
 
 template <typename P>
@@ -142,9 +147,26 @@ template <typename P>
 void SaveMatrix<P>::Print() const
 {
 	std::cout << std::endl;
+	std::cout << "  |";
+	for (size_t col = 0; col < m_Grid[0]->Width(); ++col)
+	{
+		if (col == 6 || col == 3)
+			std::cout << " ";
+		std::cout << col << "  ";
+	}
+	std::cout << std::endl;
 	for (size_t row = 0; row < m_Grid.size(); ++row)
 	{
-		m_Grid[row].Print();
+		if(row % 3 ==0)
+		{
+			for (size_t r = 0; r < m_Grid.size(); ++r)
+			{
+				std::cout << "----";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << row << " |";
+		m_Grid[row]->Print();
 		std::cout << std::endl;
 	}
 }

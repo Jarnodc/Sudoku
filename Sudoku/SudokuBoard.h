@@ -13,7 +13,7 @@ public:
 	SudokuBoard& operator=(const SudokuBoard& other) = delete;
 	SudokuBoard& operator=(SudokuBoard&& other) noexcept = delete;
 
-	void Generate(const size_t amountNumbers);
+	void Generate();
 
 private:
 	std::vector<int> GetAvailableNumbers(const size_t row, const size_t col) const;
@@ -21,6 +21,9 @@ private:
 	std::vector<int> GeVertictalNumbers(const size_t col) const;
 	std::vector<int> GetBlockNumbers(const size_t row, const size_t col) const;
 
+	bool Contains(const std::vector<int>& list, const int value) const;
+
+	bool Solve(size_t row, size_t col);
 
 	SaveMatrix<int> m_pBoard;
 	const size_t m_Size,m_AmountBlocks;
