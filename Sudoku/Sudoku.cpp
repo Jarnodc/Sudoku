@@ -1,11 +1,15 @@
 // De Cooman Jarno - 2022
 #include "pch.h"
-#include "Matrix.h"
+#include "SaveMatrix.h"
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 int main()
 {
-	Matrix<int> matrix{ 2,2 };
-	matrix.Print();
-	std::cout << matrix[2][2];
-	matrix.Print();
+	SaveMatrix<int>* matrix = new SaveMatrix<int>{ 2,2 };
+	delete matrix;
+
+
+	_CrtDumpMemoryLeaks();
 }
