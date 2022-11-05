@@ -135,7 +135,7 @@ const Col<P>& SaveMatrix<P>::operator[](size_t row) const
 {
 	if (row >= m_Grid.size())
 		row = m_Grid.size() - 1;
-	return m_Grid[row];
+	return *m_Grid[row];
 }
 
 template <typename P>
@@ -154,6 +154,6 @@ void SaveMatrix<P>::Fill(const P& value)
 {
 	for (size_t row = 0; row < m_Grid.size(); ++row)
 	{
-		m_Grid[row].Fill(value);
+		m_Grid[row]->Fill(value);
 	}
 }
