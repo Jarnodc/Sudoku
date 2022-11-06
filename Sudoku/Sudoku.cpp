@@ -11,7 +11,6 @@ int main()
 
 	SudokuBoard* pBoard{new SudokuBoard()};
 	pBoard->Generate();
-
 	delete pBoard;
 	pBoard = nullptr;
 

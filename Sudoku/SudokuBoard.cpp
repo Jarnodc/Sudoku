@@ -34,7 +34,32 @@ void SudokuBoard::Generate()
 	Solve(0, 0);
 	m_pBoard.Print();
 
+	int trials{}, amountEmpty{};
+	while(trials != 20)
+	{
+		const size_t x{ rand() % m_Size }, y{ rand() % m_Size };
+		if(m_pBoard[x][y] != 0)
+		{
+			const auto num = m_pBoard[x][y];
+			m_pBoard[x][y] = 0;
+			
+			if (IsSolvable())
+			{
+				trials = 0;
+				++amountEmpty;
+			}
+			else
+			{
+				++trials;
+				m_pBoard[x][y] = num;
+			}
+		}
+	}
 
+	size_t row, col;
+	const int value{ FirstStartCell(m_pBoard,col, row) };
+	std::cout << "Start with: " << row << ", " << col << " with value: " << value << std::endl;
+	m_pBoard.Print();
 }
 
 std::vector<int> SudokuBoard::GetAvailableNumbers(const size_t row, const size_t col) const
@@ -147,4 +172,87 @@ bool SudokuBoard::Solve(size_t row, size_t col)
 
 	}
 	return false;
+}
+
+bool SudokuBoard::IsSolvable() const
+{
+
+	SaveMatrix<int> boardCopy{9,3};
+	for (int col = 0; col < m_Size; ++col)
+	{
+		for (int row = 0; row < m_Size; ++row)
+		{
+			boardCopy[row][col] = m_pBoard[row][col];
+		}
+	}
+
+	for (int x = 0; x < m_Size; ++x)
+	{
+		for (int y = 0; y < m_Size; ++y)
+		{
+			for (int col = 0; col < m_Size; ++col)
+			{
+				for (int row = 0; row < m_Size; ++row)
+				{
+					if (boardCopy[row][col] == 0)
+					{
+						const auto availableNrs{ GetAvailableNumbers(row, col) };
+						if (availableNrs.size() == 1)
+						{
+							boardCopy[row][col] = availableNrs.front();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for (int col = 0; col < m_Size; ++col)
+	{
+		for (int row = 0; row < m_Size; ++row)
+		{
+			if (boardCopy[row][col] == 0)
+				return false;
+		}
+	}
+	return true;
+}
+
+int SudokuBoard::FirstStartCell(const SaveMatrix<int>& board, size_t& col, size_t& row) const
+{
+	for (int x = 0; x < m_Size; ++x)
+	{
+		for (int y = 0; y < m_Size; ++y)
+		{
+			for (int c = 0; c < m_Size; ++c)
+			{
+				for (int r = 0; r < m_Size; ++r)
+				{
+					if (board[r][c] == 0)
+					{
+						const auto availableNrs{ GetAvailableNumbers(r, c) };
+						if (availableNrs.size() == 1)
+						{
+							col = c;
+							row = r;
+							return availableNrs.front();
+						}
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+void SudokuBoard::SetBoard(const SaveMatrix<int>& board)
+{
+	
+	for (int x = 0; x < m_Size; ++x)
+	{
+		for (int y = 0; y < m_Size; ++y)
+		{
+			m_pBoard[x][y] = board[x][y];
+		}
+	}
 }

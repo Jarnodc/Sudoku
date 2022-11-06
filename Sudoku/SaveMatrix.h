@@ -87,7 +87,7 @@ public:
 	SaveMatrix(const size_t rows = 1, const size_t cols = 1);
 	~SaveMatrix();
 
-	SaveMatrix(const SaveMatrix& other) = delete;
+	SaveMatrix(SaveMatrix& other) = delete;
 	SaveMatrix(SaveMatrix&& other) noexcept = delete;
 	SaveMatrix& operator=(const SaveMatrix& other) = delete;
 	SaveMatrix& operator=(SaveMatrix&& other) noexcept = delete;
@@ -126,6 +126,7 @@ SaveMatrix<P>::~SaveMatrix()
 		m_Grid[row] = nullptr;
 	}
 }
+
 
 template <typename P>
 Col<P>& SaveMatrix<P>::operator[](size_t row)
